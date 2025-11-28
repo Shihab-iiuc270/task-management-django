@@ -1,0 +1,15 @@
+#creating forms should be first letter in captial and last word should be 'Form'
+from django import forms
+class TaskForm(forms.Form):
+     title = forms.CharField(max_length=250)
+     description = forms.CharField(widget=forms.Textarea,label="task description")
+     due_date = forms.DateField(widget=forms.SelectDateWidget,label="Due date")
+     assigned_to = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple,choices=[],label="Assign To ")
+
+     def __init__(self,*args,**kwargs):
+          employees = kwargs.pop("employees",[])
+          super().__init__(*args,**kwargs)
+          self.fields['assigned_to'].choices =[
+               (emp.id,emp.name) for emp in employees
+          ]
+          
